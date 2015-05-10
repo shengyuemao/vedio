@@ -4,5 +4,8 @@
     <string name="app_name">Vedio</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="activity_vedio_title">播放網絡視頻</string>
+    <string name="activity_vedio_pause">暫停</string>
+    <string name="activity_vedio_stop">停止</string>
 
 </resources>
