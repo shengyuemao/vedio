@@ -1,4 +1,4 @@
-package cn.com.Tool.Canstact;
+package maomo.vedio.util;
 
 public class Canstact {
 
