@@ -166,6 +166,7 @@ public abstract class BasePlayer implements OnBufferingUpdateListener,
 			float ar = videoWidth / videoHeight;
 			if (screenWidth > screenHeight)
 			{
+				Logger.i("screenWidth > screenHeight");
 				if (videoHeight >= screenHeight)
 				{
 					videoHeight = screenHeight;

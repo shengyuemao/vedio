@@ -8,6 +8,7 @@ import maomo.vedio.gesture.GestureBuilderActivity;
 import maomo.vedio.http.FileAsyncHttpResponseHandler;
 import maomo.vedio.service.PlayerFilePath;
 import maomo.vedio.service.PlayerHttpUrl;
+import maomo.vedio.service.PlayerHttpUrlWithVitamio;
 import maomo.vedio.util.Canstact;
 import maomo.vedio.util.FileUtil;
 import maomo.vedio.util.Logger;
@@ -47,7 +48,7 @@ public class VedioPlayerActivity extends BaseActivity
 	private GestureOverlayView gestureOverlayView;
 
 	// 不同播放类的申明
-	private PlayerHttpUrl player;
+	private PlayerHttpUrlWithVitamio player;
 	private PlayerFilePath playerFromFile;
 
 	// 手势库
@@ -146,7 +147,7 @@ public class VedioPlayerActivity extends BaseActivity
 
 	private void initProptrey()
 	{
-		player = new PlayerHttpUrl(surfaceView, skbProgress, this);
+		player = new PlayerHttpUrlWithVitamio(surfaceView, skbProgress, this);
 		playerFromFile = new PlayerFilePath(surfaceView, skbProgress, this);
 
 		// 从raw中加载已经有的手势库
@@ -251,11 +252,18 @@ public class VedioPlayerActivity extends BaseActivity
 				// 匹配的手势
 				if (prediction.score > 1.0)
 				{
-					/*
-					 * Toast.makeText(getApplicationContext(), "正在跳转",
-					 * Toast.LENGTH_LONG).show();
-					 */
-					player.playUrl(Canstact.VEDIO_URL_CARTOON);
+
+					if (prediction.name.equals("x"))
+					{// 如果手势为x,则切换为安全模式
+						player.playVideo(5,Canstact.VEDIO_URL_CARTOON);
+						//player.playUrl(Canstact.VEDIO_URL);
+					}
+					if (prediction.name.equals("y"))
+					{// 如果手势为y,则切换为正常模式
+						player.playVideo(5, Canstact.VEDIO_URL_CARTOON);;
+						//player.playUrl(Canstact.VEDIO_URL_CARTOON);;
+					}
+
 				}
 			}
 
@@ -280,9 +288,10 @@ public class VedioPlayerActivity extends BaseActivity
 
 				break;
 			case R.id.activity_vedio_playurl:
-				String url = Canstact.VEDIO_URL_CARTOON;
-				player.playUrl(url);// 实时播放网络视频
+				
+				player.playVideo(5, Canstact.VEDIO_URL_CARTOON);// 实时播放网络视频
 
+				//player.playUrl(Canstact.VEDIO_URL_CARTOON);
 				// 缓存网络视频，当缓存成功后播放
 
 				break;
@@ -312,10 +321,8 @@ public class VedioPlayerActivity extends BaseActivity
 	@Override
 	protected void onDestroy()
 	{
-		player.stop();
-		surfaceView = null;
-
 		super.onDestroy();
+		player.onActivityPauseOrDestroy();
 		Logger.e("onDestroy");
 	}
 
@@ -346,7 +353,7 @@ public class VedioPlayerActivity extends BaseActivity
 	class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener
 	{
 
-		int progress;// 记录滑动数值
+		long progress;// 记录滑动数值
 
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress,
@@ -357,11 +364,6 @@ public class VedioPlayerActivity extends BaseActivity
 				this.progress = progress * player.mediaPlayer.getDuration()
 						/ seekBar.getMax();
 			}
-			/*
-			 * if (playerFromFile.mediaPlayer != null) { this.progress =
-			 * progress playerFromFile.mediaPlayer.getDuration() /
-			 * seekBar.getMax(); }
-			 */
 
 		}
 
@@ -379,10 +381,6 @@ public class VedioPlayerActivity extends BaseActivity
 				player.mediaPlayer.seekTo(progress);
 			}
 			Logger.e("" + progress);
-			/*
-			 * if (playerFromFile.mediaPlayer != null) {
-			 * playerFromFile.mediaPlayer.seekTo(progress); }
-			 */
 
 		}
 

@@ -9,12 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <SurfaceView
-            android:id="@+id/activity_vedio_surfaceView"
+        <io.vov.vitamio.widget.CenterLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal" >
-        </SurfaceView>
+            android:orientation="vertical" >
+
+            <SurfaceView
+                android:id="@+id/activity_vedio_surfaceView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal" >
+            </SurfaceView>
+        </io.vov.vitamio.widget.CenterLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,12 +55,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_vedio_stop" >
                 </Button>
-                <Button 
+
+                <Button
                     android:id="@+id/activity_vedio_change"
                     android:layout_width="80dip"
                     android:layout_height="wrap_content"
-                    android:text="@string/activity_video_change"
-                    />
+                    android:text="@string/activity_video_change" />
             </LinearLayout>
 
             <LinearLayout
