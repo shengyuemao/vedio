@@ -26,11 +26,11 @@ public abstract class BasePlayer implements OnBufferingUpdateListener,
 {
 	protected int videoWidth;
 	protected int videoHeight;
-	public MediaPlayer mediaPlayer = new MediaPlayer();
-	protected SurfaceHolder surfaceHolder;
-	protected SeekBar skbProgress;
+	public MediaPlayer mediaPlayer ;
+	public SurfaceHolder surfaceHolder;
+	public SeekBar skbProgress;
 	protected Timer mTimer = new Timer();
-	protected SurfaceView surfaceView;
+	public SurfaceView surfaceView;
 
 	protected Activity activity;
 
@@ -83,9 +83,11 @@ public abstract class BasePlayer implements OnBufferingUpdateListener,
 	public BasePlayer(SurfaceView surfaceView, SeekBar skbProgress,
 			Activity activity)
 	{
+		
 		this.activity = activity;
 		this.skbProgress = skbProgress;
 		this.surfaceView = surfaceView;
+		this.mediaPlayer = new MediaPlayer();
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -151,7 +153,7 @@ public abstract class BasePlayer implements OnBufferingUpdateListener,
 	 */
 	public abstract void stop();
 
-	public void changeVideoSize(MediaPlayer mediaPlayer, int width, int height)
+	public void changeVideoSize( int width, int height)
 	{
 
 		videoWidth = width;
@@ -181,30 +183,8 @@ public abstract class BasePlayer implements OnBufferingUpdateListener,
 				}
 
 				videoHeight = (int) (videoWidth * ar);
-			}
-			surfaceHolder.setFixedSize(videoWidth, videoHeight);
-
-			/*
-			 * int width1 = surfaceView.getWidth(); int height1 =
-			 * surfaceView.getHeight(); float boxWidth = width1; float boxHeight
-			 * = height1;
-			 * 
-			 * float wr = boxWidth / videoWidth; float hr = boxHeight /
-			 * videoHeight;
-			 * 
-			 * if (videoHeight >= height1 && videoWidth >= width1) { videoWidth
-			 * = width1; float ar = videoWidth / videoHeight; videoHeight =
-			 * (int) (boxHeight / ar);
-			 * 
-			 * } else if (videoHeight >= height1) {
-			 * 
-			 * }
-			 * 
-			 * if (wr > hr) { width1 = (int) (boxWidth * ar); } else { height1 =
-			 * (int) (boxHeight / ar); }
-			 * 
-			 * surfaceHolder.setFixedSize(width1, height1);
-			 */
+			}			
 		}
+		surfaceHolder.setFixedSize(videoWidth, videoHeight);
 	}
 }

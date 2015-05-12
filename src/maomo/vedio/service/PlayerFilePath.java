@@ -108,7 +108,7 @@ public class PlayerFilePath extends BasePlayer
 	@Override
 	public void onVideoSizeChanged(MediaPlayer mp, int width, int height)
 	{
-		changeVideoSize(mp,width, height);
+		changeVideoSize(width, height); 
 		Logger.e("width = " + width + ";" + "height = " + height);
 	}
 

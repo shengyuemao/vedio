@@ -11,13 +11,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
 
-@SuppressLint({ "HandlerLeak", "NewApi" })
-public class PlayerHttpUrl extends BasePlayer {
-
-
-
-	
-
+@SuppressLint(
+{ "HandlerLeak", "NewApi" })
+public class PlayerHttpUrl extends BasePlayer
+{
 
 	public PlayerHttpUrl(SurfaceView surfaceView, SeekBar skbProgress,
 			Activity activity)
@@ -31,11 +28,13 @@ public class PlayerHttpUrl extends BasePlayer {
 	 * @author 盛月茂
 	 * 
 	 */
-	public void play() {
-		if (mediaPlayer != null) {
+	public void play()
+	{
+		if (mediaPlayer != null)
+		{
 			mediaPlayer.start();
 		}
-		
+
 	}
 
 	/**
@@ -44,17 +43,25 @@ public class PlayerHttpUrl extends BasePlayer {
 	 * @param videoUrl
 	 *            网络地址
 	 */
-	public void playUrl(String videoUrl) {
-		try {
+	public void playUrl(String videoUrl)
+	{
+		try
+		{
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(videoUrl);
 			mediaPlayer.prepare();// prepare之後自動播放
 			mediaPlayer.start();
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e)
+		{
+			Logger.e("error1");
 			e.printStackTrace();
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException e)
+		{
+			Logger.e("error2");
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
+			Logger.e("error3");
 			e.printStackTrace();
 		}
 	}
@@ -64,32 +71,41 @@ public class PlayerHttpUrl extends BasePlayer {
 	 * 
 	 * @param 有待改善
 	 */
-	public void pause() {
-		if (mediaPlayer != null) {
+	public void pause()
+	{
+		if (mediaPlayer != null)
+		{
 			mediaPlayer.pause();
 		}
-		
+
 	}
 
-	public void stop() {
-		if (mediaPlayer != null) {
+	public void stop()
+	{
+		if (mediaPlayer != null)
+		{
 			mediaPlayer.stop();
 			mediaPlayer.release();
 			mediaPlayer = null;
+			mTimerTask.cancel();
+			mTimer.cancel();
+			
 		}
 	}
 
-	
 	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		try {
+	public void surfaceCreated(SurfaceHolder holder)
+	{
+		try
+		{
 			mediaPlayer.setDisplay(holder);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnVideoSizeChangedListener(this);
 			mediaPlayer.setOnCompletionListener(this);
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 
 			Logger.e("error");
 
@@ -101,13 +117,15 @@ public class PlayerHttpUrl extends BasePlayer {
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+			int height)
+	{
 		// 当surface改变时调用
 		Logger.e("surfaceChanged");
 	}
-	
+
 	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
+	public void surfaceDestroyed(SurfaceHolder holder)
+	{
 		// 当surface销毁时调用
 		Logger.e("surfaceDestroyed");
 	}
@@ -117,16 +135,17 @@ public class PlayerHttpUrl extends BasePlayer {
 	 * 通过onPrepared播放
 	 * @param mp MediaPlayer 播放器
 	 */
-	public void onPrepared(MediaPlayer mp) {
-	
-		if(videoHeight !=0 && videoWidth != 0){
-			mp.start();
-		}
+	public void onPrepared(MediaPlayer mp)
+	{
+
+		mp.start();
+
 		Logger.e("onPrepared");
 	}
 
 	@Override
-	public void onCompletion(MediaPlayer mp) {
+	public void onCompletion(MediaPlayer mp)
+	{
 		// 播放完成时调用
 		Logger.e("onCompletion");
 
@@ -138,13 +157,16 @@ public class PlayerHttpUrl extends BasePlayer {
 	 * @param mp
 	 * @param percent
 	 */
-	public void onBufferingUpdate(MediaPlayer mp, int percent) {
+	public void onBufferingUpdate(MediaPlayer mp, int percent)
+	{
 		skbProgress.setSecondaryProgress(percent);
 	}
 
 	@Override
-	public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-		changeVideoSize(mp, width, height);
+	public void onVideoSizeChanged(MediaPlayer mp, int width, int height)
+	{
+		Logger.e("width = " + width + ";" + "height = " + height);
+		changeVideoSize(width, height);
 	}
 
 }

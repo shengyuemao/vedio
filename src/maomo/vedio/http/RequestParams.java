@@ -89,6 +89,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * client.post("http://myendpoint.com", params, responseHandler);
  * </pre>
  */
+@SuppressWarnings("serial")
 public class RequestParams implements Serializable {
 
     public final static String APPLICATION_OCTET_STREAM =
@@ -343,7 +344,8 @@ public class RequestParams implements Serializable {
      * @param key   the key name for the param, either existing or new.
      * @param value the value string for the new param.
      */
-    public void add(String key, String value) {
+    @SuppressWarnings("unchecked")
+	public void add(String key, String value) {
         if (key != null && value != null) {
             Object params = urlParamsWithObjects.get(key);
             if (params == null) {
@@ -568,7 +570,8 @@ public class RequestParams implements Serializable {
         return lparams;
     }
 
-    private List<BasicNameValuePair> getParamsList(String key, Object value) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private List<BasicNameValuePair> getParamsList(String key, Object value) {
         List<BasicNameValuePair> params = new LinkedList<BasicNameValuePair>();
         if (value instanceof Map) {
             Map map = (Map) value;

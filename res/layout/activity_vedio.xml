@@ -4,65 +4,77 @@
     android:layout_height="match_parent"
     android:background="#000000" >
 
-    <SurfaceView
-        android:id="@+id/activity_vedio_surfaceView"
+    <android.gesture.GestureOverlayView
+        android:id="@+id/activity_vedio_gesture"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal" >
-    </SurfaceView>
+        android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="4.0dip"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/activity_vedio_playurl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_vedio_title" >
-            </Button>
-
-            <Button
-                android:id="@+id/activity_vedio_pause"
-                android:layout_width="80dip"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_vedio_pause" >
-            </Button>
-
-            <Button
-                android:id="@+id/activity_vedio_stop"
-                android:layout_width="80dip"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_vedio_stop" >
-            </Button>
-        </LinearLayout>
+        <SurfaceView
+            android:id="@+id/activity_vedio_surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal" >
+        </SurfaceView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
-            android:orientation="horizontal" >
+            android:layout_gravity="bottom"
+            android:orientation="vertical" >
 
-            <SeekBar
-                android:id="@+id/activity_vedio_skbProgress"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1.0"
-                android:max="100"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip" >
-            </SeekBar>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4.0dip"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/activity_vedio_playurl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_vedio_title" >
+                </Button>
+
+                <Button
+                    android:id="@+id/activity_vedio_pause"
+                    android:layout_width="80dip"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_vedio_pause" >
+                </Button>
+
+                <Button
+                    android:id="@+id/activity_vedio_stop"
+                    android:layout_width="80dip"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_vedio_stop" >
+                </Button>
+                <Button 
+                    android:id="@+id/activity_vedio_change"
+                    android:layout_width="80dip"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_video_change"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip"
+                android:orientation="horizontal" >
+
+                <SeekBar
+                    android:id="@+id/activity_vedio_skbProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1.0"
+                    android:max="100"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip" >
+                </SeekBar>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </android.gesture.GestureOverlayView>
 
 </FrameLayout>

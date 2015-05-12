@@ -2,9 +2,10 @@ package maomo.vedio.vedioplayer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import maomo.vedio.gesture.GestureBuilderActivity;
 import maomo.vedio.http.FileAsyncHttpResponseHandler;
-import maomo.vedio.httputil.FileNet;
 import maomo.vedio.service.PlayerFilePath;
 import maomo.vedio.service.PlayerHttpUrl;
 import maomo.vedio.util.Canstact;
@@ -15,16 +16,19 @@ import org.apache.http.Header;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.Prediction;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SeekBar;
-
-import com.base.vedio.R;
 
 /**
  * 此处用于播放来自网络，本地，和资源文件夹中文件 目前只可以播放MP4文件
@@ -33,19 +37,21 @@ import com.base.vedio.R;
  * @since 2015/5/11
  *
  */
-public class VedioPlayerActivity extends ActionBarActivity
+public class VedioPlayerActivity extends BaseActivity
 {
 
 	// 控件申明
 	private SurfaceView surfaceView;
-	private Button btnPause, btnPlayUrl, btnStop;
+	private Button btnPause, btnPlayUrl, btnStop, btnGesture;
 	private SeekBar skbProgress;
+	private GestureOverlayView gestureOverlayView;
 
 	// 不同播放类的申明
 	private PlayerHttpUrl player;
 	private PlayerFilePath playerFromFile;
-	
-	
+
+	// 手势库
+	GestureLibrary mGestureLib;
 
 	@Override
 	/**
@@ -55,12 +61,12 @@ public class VedioPlayerActivity extends ActionBarActivity
 	{
 		super.onCreate(savedInstanceState);
 
-		// requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_vedio);
 
 		// 初始化界面佈局
 		initView();
 
+		addActivitys(VedioPlayerActivity.class.getName());// 添加到activity列表中
 		Logger.e("onCreate");
 	}
 
@@ -124,12 +130,31 @@ public class VedioPlayerActivity extends ActionBarActivity
 		btnStop = (Button) findViewById(R.id.activity_vedio_stop);
 		btnStop.setOnClickListener(new ClickEvent());
 
+		btnGesture = (Button) findViewById(R.id.activity_vedio_change);
+		btnGesture.setOnClickListener(new ClickEvent());
+
 		skbProgress = (SeekBar) findViewById(R.id.activity_vedio_skbProgress);
 		skbProgress.setOnSeekBarChangeListener(new SeekBarChangeEvent());
 
-		player = new PlayerHttpUrl(surfaceView, skbProgress,this);
-		playerFromFile = new PlayerFilePath(surfaceView, skbProgress,this);
+		gestureOverlayView = (GestureOverlayView) findViewById(R.id.activity_vedio_gesture);
+		gestureOverlayView
+				.addOnGesturePerformedListener(new GesturePerformed());
 
+		initProptrey();
+
+	}
+
+	private void initProptrey()
+	{
+		player = new PlayerHttpUrl(surfaceView, skbProgress, this);
+		playerFromFile = new PlayerFilePath(surfaceView, skbProgress, this);
+
+		// 从raw中加载已经有的手势库
+		mGestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures); // 注2
+		if (!mGestureLib.load())
+		{
+			finish();
+		}
 	}
 
 	/**
@@ -210,6 +235,34 @@ public class VedioPlayerActivity extends ActionBarActivity
 		}
 	};
 
+	class GesturePerformed implements OnGesturePerformedListener
+	{
+
+		@Override
+		public void onGesturePerformed(GestureOverlayView overlay,
+				Gesture gesture)
+		{
+			// 从手势库中查询匹配的内容，匹配的结果可能包括多个相似的结果，匹配度高的结果放在最前面
+			ArrayList<Prediction> predictions = mGestureLib.recognize(gesture); // 注3
+
+			if (predictions.size() > 0)
+			{
+				Prediction prediction = (Prediction) predictions.get(0);
+				// 匹配的手势
+				if (prediction.score > 1.0)
+				{
+					/*
+					 * Toast.makeText(getApplicationContext(), "正在跳转",
+					 * Toast.LENGTH_LONG).show();
+					 */
+					player.playUrl(Canstact.VEDIO_URL_CARTOON);
+				}
+			}
+
+		}
+
+	}
+
 	/**
 	 * 初始化內部類 點擊事件
 	 */
@@ -227,20 +280,19 @@ public class VedioPlayerActivity extends ActionBarActivity
 
 				break;
 			case R.id.activity_vedio_playurl:
-				String url = Canstact.VEDIO_URL;
-				// player.playUrl(url);//实时播放网络视频
+				String url = Canstact.VEDIO_URL_CARTOON;
+				player.playUrl(url);// 实时播放网络视频
 
 				// 缓存网络视频，当缓存成功后播放
-				FileNet fileNet = new FileNet(getApplicationContext());
-				fileNet.setResponseHandlerInterface(new FileResponse(
-						getApplicationContext()));
-				fileNet.onRun(url, "", "");
 
 				break;
 			case R.id.activity_vedio_stop:
 
 				player.stop();// 停止播放
 
+				break;
+			case R.id.activity_vedio_change:
+				goToNextActivitys(new GestureBuilderActivity(), new Bundle());// 跳转到手势列表中去
 				break;
 
 			}
@@ -305,12 +357,11 @@ public class VedioPlayerActivity extends ActionBarActivity
 				this.progress = progress * player.mediaPlayer.getDuration()
 						/ seekBar.getMax();
 			}
-			if (playerFromFile.mediaPlayer != null)
-			{
-				this.progress = progress
-						* playerFromFile.mediaPlayer.getDuration()
-						/ seekBar.getMax();
-			}
+			/*
+			 * if (playerFromFile.mediaPlayer != null) { this.progress =
+			 * progress playerFromFile.mediaPlayer.getDuration() /
+			 * seekBar.getMax(); }
+			 */
 
 		}
 
@@ -328,10 +379,10 @@ public class VedioPlayerActivity extends ActionBarActivity
 				player.mediaPlayer.seekTo(progress);
 			}
 			Logger.e("" + progress);
-			if (playerFromFile.mediaPlayer != null)
-			{
-				playerFromFile.mediaPlayer.seekTo(progress);
-			}
+			/*
+			 * if (playerFromFile.mediaPlayer != null) {
+			 * playerFromFile.mediaPlayer.seekTo(progress); }
+			 */
 
 		}
 
