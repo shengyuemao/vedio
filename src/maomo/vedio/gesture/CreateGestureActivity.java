@@ -34,7 +34,7 @@ public class CreateGestureActivity extends Activity
 {
 	private static final float LENGTH_THRESHOLD = 120.0f;
 
-	private Gesture mGesture;
+	private Gesture mGesture;	
 	private View mDoneButton;
 
 	@Override

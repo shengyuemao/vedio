@@ -288,7 +288,7 @@ public class VedioPlayerActivity extends BaseActivity
 				break;
 			case R.id.activity_vedio_playurl:
 				
-				player.playVideo(5, Canstact.VEDIO_URL_CARTOON);// 实时播放网络视频
+				player.playVideo(5, Canstact.VEDIO_URL);// 实时播放网络视频
 
 				//player.playUrl(Canstact.VEDIO_URL_CARTOON);
 				// 缓存网络视频，当缓存成功后播放
