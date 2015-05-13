@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import maomo.vedio.gesture.GestureBuilderActivity;
 import maomo.vedio.http.FileAsyncHttpResponseHandler;
 import maomo.vedio.service.PlayerFilePath;
+import maomo.vedio.service.PlayerHttpUrl;
 import maomo.vedio.service.PlayerHttpUrlWithVitamio;
 import maomo.vedio.util.Canstact;
 import maomo.vedio.util.FileUtil;
@@ -47,7 +48,7 @@ public class VedioPlayerActivity extends BaseActivity
 	private GestureOverlayView gestureOverlayView;
 
 	// 不同播放类的申明
-	private PlayerHttpUrlWithVitamio player;
+	private PlayerHttpUrl player;
 	private PlayerFilePath playerFromFile;
 
 	// 手势库
@@ -146,7 +147,7 @@ public class VedioPlayerActivity extends BaseActivity
 
 	private void initProptrey()
 	{
-		player = new PlayerHttpUrlWithVitamio(surfaceView, skbProgress, this);
+		player = new PlayerHttpUrl(surfaceView, skbProgress, this);
 		playerFromFile = new PlayerFilePath(surfaceView, skbProgress, this);
 
 		// 从raw中加载已经有的手势库
@@ -254,13 +255,13 @@ public class VedioPlayerActivity extends BaseActivity
 
 					if (prediction.name.equals("x"))
 					{// 如果手势为x,则切换为安全模式
-						player.playVideo(5,Canstact.VEDIO_URL_CARTOON);
-						//player.playUrl(Canstact.VEDIO_URL);
+						//player.playVideo(5,Canstact.VEDIO_URL_CARTOON);
+						player.playUrl(Canstact.VEDIO_URL);
 					}
 					if (prediction.name.equals("y"))
 					{// 如果手势为y,则切换为正常模式
-						player.playVideo(5, Canstact.VEDIO_URL_CARTOON);;
-						//player.playUrl(Canstact.VEDIO_URL_CARTOON);;
+						//player.playVideo(5, Canstact.VEDIO_URL_CARTOON);;
+						player.playUrl(Canstact.VEDIO_URL_CARTOON);;
 					}
 
 				}
@@ -288,9 +289,9 @@ public class VedioPlayerActivity extends BaseActivity
 				break;
 			case R.id.activity_vedio_playurl:
 				
-				player.playVideo(5, Canstact.VEDIO_URL);// 实时播放网络视频
+				//player.playVideo(5, Canstact.VEDIO_URL);// 实时播放网络视频
 
-				//player.playUrl(Canstact.VEDIO_URL_CARTOON);
+				player.playUrl(Canstact.VEDIO_URL_CARTOON);
 				// 缓存网络视频，当缓存成功后播放
 
 				break;
@@ -321,7 +322,7 @@ public class VedioPlayerActivity extends BaseActivity
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		player.onActivityPauseOrDestroy();
+		//player.onActivityPauseOrDestroy();
 		Logger.e("onDestroy");
 	}
 
@@ -377,7 +378,7 @@ public class VedioPlayerActivity extends BaseActivity
 		{
 			if (player.mediaPlayer != null)
 			{
-				player.mediaPlayer.seekTo(progress);
+				player.mediaPlayer.seekTo((int)progress);
 			}
 			Logger.e("" + progress);
 

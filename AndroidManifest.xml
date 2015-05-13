@@ -37,6 +37,17 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".VedioPlayerWithVitmioActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
 
             <!--
             <intent-filter>
@@ -47,16 +58,20 @@
             -->
         </activity>
         <activity
-            android:name=".VedioPlayerWithVitmioActivity"
+            android:name=".VideoViewBuffer"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+
+         
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
+
         <!-- 手势库列表 -->
         <activity
             android:name="maomo.vedio.gesture.GestureBuilderActivity"

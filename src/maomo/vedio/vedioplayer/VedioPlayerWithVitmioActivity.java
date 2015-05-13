@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 public class VedioPlayerWithVitmioActivity extends BaseActivity {
 	/** 当前视频路径 */
-	private String path = Canstact.VEDIO_URL_CARTOON;
+	private String path = Canstact.VEDIO_URL;
 	/** 当前声音 */
 	private int mVolume = -1;
 	/** 最大音量 */
