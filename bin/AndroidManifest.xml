@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".mBaseApplication"
+        android:name="maomo.vedio.vedioapplication.mBaseApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -33,43 +33,31 @@
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".VedioPlayerActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-            <!-- <intent-filter>
+            android:name="maomo.vedio.launcher.MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".VedioPlayerActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".VedioPlayerWithVitmioActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".VideoViewBuffer"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-
-         
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
 
         <!-- 手势库列表 -->
@@ -82,7 +70,7 @@
             android:name="maomo.vedio.gesture.CreateGestureActivity"
             android:label="@string/label_create_gesture" />
         <activity
-            android:name=".BaseActivity"
+            android:name="maomo.vedio.launcher.BaseActivity"
             android:label="@string/title_activity_base" >
         </activity>
     </application>

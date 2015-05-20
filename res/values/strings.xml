@@ -7,7 +7,9 @@
     <string name="activity_vedio_title">播放網絡視頻</string>
     <string name="activity_vedio_pause">暫停</string>
     <string name="activity_vedio_stop">停止</string>
-
+    <!-- Ldrawer -->
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
     <!-- General -->
     <skip />
     <!-- Application name -->
@@ -58,5 +60,6 @@
     <string name="gestures_error_loading">Could not load %s. Make sure you have storage available.</string>
     <string name="activity_video_change">手势模式</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import maomo.vedio.gesture.GestureBuilderActivity;
 import maomo.vedio.http.FileAsyncHttpResponseHandler;
+import maomo.vedio.launcher.BaseActivity;
 import maomo.vedio.service.PlayerFilePath;
 import maomo.vedio.service.PlayerHttpUrl;
 import maomo.vedio.service.PlayerHttpUrlWithVitamio;

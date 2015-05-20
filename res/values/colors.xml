@@ -19,4 +19,8 @@
 -->
 <resources>
     <color name="gesture_color">#FFFFFF00</color>
+    <color name="ldrawer_color">#FFFFFF</color>
+    
+     <color name="actionbar_color">#bf360c</color>
+    <color name="drawer_arrow_second_color">#303f9f</color>
 </resources>
