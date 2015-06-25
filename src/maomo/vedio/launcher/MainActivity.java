@@ -8,7 +8,6 @@ import maomo.vedio.vedioplayer.VedioPlayerWithVitmioActivity;
 import maomo.vedio.vedioplayer.VideoViewBuffer;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;

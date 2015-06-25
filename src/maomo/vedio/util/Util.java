@@ -9,11 +9,9 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.os.storage.StorageManager;
 
-public class Util
-{
+public class Util {
 
-	public static ScreenBean getScreenPix(Activity activity)
-	{
+	public static ScreenBean getScreenPix(Activity activity) {
 
 		ScreenBean screenBean = new ScreenBean();
 		screenBean.setHeight(getScreenHeight(activity));
@@ -22,22 +20,19 @@ public class Util
 	}
 
 	@SuppressWarnings("deprecation")
-	public static int getScreenWidth(Activity activity)
-	{
+	public static int getScreenWidth(Activity activity) {
 		return activity.getWindowManager().getDefaultDisplay().getWidth();
 	}
 
 	@SuppressWarnings("deprecation")
-	public static int getScreenHeight(Activity activity)
-	{
+	public static int getScreenHeight(Activity activity) {
 		return activity.getWindowManager().getDefaultDisplay().getHeight();
 	}
 
 	/**
 	 * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
 	 */
-	public static int dip2px(Context context, float dpValue)
-	{
+	public static int dip2px(Context context, float dpValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		return (int) (dpValue * scale + 0.5f);
 	}
@@ -45,19 +40,18 @@ public class Util
 	/**
 	 * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
 	 */
-	public static int px2dip(Context context, float pxValue)
-	{
+	public static int px2dip(Context context, float pxValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		return (int) (pxValue / scale + 0.5f);
 	}
-	
-	
+
 	/**
 	 * 获取所有存储路径
 	 * 
 	 * @param context
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List<String> getDirs(Context context) {
 		List<String> dirs = new ArrayList<String>();
 		StorageManager storageManager = (StorageManager) context
@@ -112,6 +106,4 @@ public class Util
 				.setStreamVolume(AudioManager.STREAM_MUSIC, index, 0);
 	}
 
-	
-	
 }

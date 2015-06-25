@@ -2,13 +2,22 @@ package maomo.vedio.vedioplayer;
 
 import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.MediaPlayer;
+import io.vov.vitamio.MediaPlayer.OnCompletionListener;
 import io.vov.vitamio.utils.Log;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
+import io.vov.vitamio.widget.VideoView.OnNextPlayListener;
+
+import java.io.IOException;
+
 import maomo.vedio.launcher.BaseActivity;
 import maomo.vedio.util.Canstact;
 import maomo.vedio.util.ScreenBean;
 import maomo.vedio.util.Util;
+import maomo.vedio.vediobean.VedioModel;
+import maomo.vedio.vediolist.VedioList;
+import maomo.vedio.vediolist.VedioListIterator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,12 +29,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+@SuppressLint("HandlerLeak")
 public class VedioPlayerWithVitmioActivity extends BaseActivity
 {
 	/** 当前视频路径 */
-	private String path = Canstact.VEDIO_URL_CARTOON;
+	private String path = Canstact.VEDIO_URL;
+	
+	private VedioListIterator vedioListIterator ;
+	private VedioList vedioList;
 	/** 当前声音 */
 	private int mVolume = -1;
 	/** 最大音量 */
@@ -50,7 +62,25 @@ public class VedioPlayerWithVitmioActivity extends BaseActivity
 		super.onCreate(icicle);
 		if (!LibsChecker.checkVitamioLibs(this))
 			return;
-		setContentView(R.layout.acy_play);
+		setContentView(R.layout.acy_play);		
+		
+		VedioModel vedioModel = new VedioModel();
+		VedioModel vedioModel1 = new VedioModel();
+		VedioModel vedioModel2 = new VedioModel();
+		VedioModel vedioModel3 = new VedioModel();
+		vedioList = new VedioList();		
+		vedioListIterator = new VedioListIterator(vedioList);
+		
+		vedioModel.setVedioUrl(Canstact.VEDIO_URL_CARTOON);
+		vedioModel1.setVedioUrl(Canstact.VEDIO_URL_CARTOON);
+		vedioModel2.setVedioUrl(Canstact.VEDIO_URL_CARTOON);
+		vedioModel3.setVedioUrl(Canstact.VEDIO_URL_CARTOON);
+		//添加数据
+		vedioListIterator.insertAfter(vedioModel);
+		vedioListIterator.insertAfter(vedioModel1);
+		vedioListIterator.insertAfter(vedioModel2);
+		vedioListIterator.insertAfter(vedioModel3);
+		
 		init();
 	}
 
@@ -72,9 +102,19 @@ public class VedioPlayerWithVitmioActivity extends BaseActivity
 			return;
 		} else
 		{
-			mVideoView.setVideoPath(path);
+			mVideoView.setVideoPath(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
 			mVideoView.setMediaController(new MediaController(this));
 			mVideoView.requestFocus();
+			mVideoView.setOnNextPlayListener(new OnNextPlayListener() {
+				
+				@Override
+				public void playNext(MediaPlayer mp) {
+				
+					vedioListIterator.preLink();//下一曲	
+					mVideoView.setVideoPath(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
+				
+				}
+			});
 			mVideoView
 					.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
 					{
@@ -84,6 +124,32 @@ public class VedioPlayerWithVitmioActivity extends BaseActivity
 							mediaPlayer.setPlaybackSpeed(1.0f);
 						}
 					});
+			mVideoView.setOnCompletionListener(new OnCompletionListener() {
+				
+				@Override
+				public void onCompletion(MediaPlayer mp) {
+					try {
+						vedioListIterator.preLink();//下一曲						
+						mp.reset();
+						mp.setDataSource(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
+						mp.prepare();
+						mp.start();
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SecurityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalStateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			});
 		}
 	}
 
@@ -303,14 +369,12 @@ public class VedioPlayerWithVitmioActivity extends BaseActivity
 			{
 				// 缩小
 				changeLayout(0);
-				Toast.makeText(VedioPlayerWithVitmioActivity.this, "缩小", 1000)
-						.show();
+				
 			} else if (oldDis - curDis < -50)
 			{
 				// 放大
 				changeLayout(1);
-				Toast.makeText(VedioPlayerWithVitmioActivity.this, "放大", 1000)
-						.show();
+				
 			}
 		}
 

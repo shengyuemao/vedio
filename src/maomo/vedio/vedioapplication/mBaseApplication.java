@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import maomo.vedio.launcher.BaseActivity;
 import maomo.vedio.vedioplayer.R;
-import maomo.vedio.vedioplayer.R.string;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;

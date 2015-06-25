@@ -4,16 +4,13 @@ import maomo.vedio.vedioapplication.mBaseApplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 
-public class BaseActivity extends Activity
-{
+public class BaseActivity extends Activity {
 
 	protected mBaseApplication baseApplication;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// 初始化mBaseApplication
 		baseApplication = (mBaseApplication) getApplicationContext();
@@ -25,18 +22,23 @@ public class BaseActivity extends Activity
 	 * @param key
 	 *            key值
 	 */
-	public void addActivitys(String key)
-	{
+	public void addActivitys(String key) {
 		baseApplication.addActivity(key, this);
 	}
-	
-	public void goToNextActivitys(Activity nextActivty,Bundle bundle){
+
+	/**
+	 * 跳转activity
+	 * 
+	 * @param nextActivty
+	 * @param bundle
+	 */
+	public void goToNextActivitys(Activity nextActivty, Bundle bundle) {
 		Intent intent = new Intent();
-		if(bundle != null)
-		intent.putExtras(bundle);
+		if (bundle != null)
+			intent.putExtras(bundle);
 		intent.setClass(this, nextActivty.getClass());
 		startActivity(intent);
-		
+
 	}
 
 }
