@@ -7,9 +7,6 @@ import io.vov.vitamio.utils.Log;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 import io.vov.vitamio.widget.VideoView.OnNextPlayListener;
-
-import java.io.IOException;
-
 import maomo.vedio.launcher.BaseActivity;
 import maomo.vedio.util.Canstact;
 import maomo.vedio.util.ScreenBean;
@@ -76,10 +73,10 @@ public class VedioPlayerWithVitmioActivity extends BaseActivity
 		vedioModel2.setVedioUrl(Canstact.VEDIO_URL_CARTOON);
 		vedioModel3.setVedioUrl(Canstact.VEDIO_URL_CARTOON);
 		//添加数据
-		vedioListIterator.insertAfter(vedioModel);
-		vedioListIterator.insertAfter(vedioModel1);
-		vedioListIterator.insertAfter(vedioModel2);
-		vedioListIterator.insertAfter(vedioModel3);
+		vedioListIterator.insertBefore(vedioModel);
+		vedioListIterator.insertBefore(vedioModel1);
+		vedioListIterator.insertBefore(vedioModel2);
+		vedioListIterator.insertBefore(vedioModel3);
 		
 		init();
 	}
@@ -110,7 +107,8 @@ public class VedioPlayerWithVitmioActivity extends BaseActivity
 				@Override
 				public void playNext(MediaPlayer mp) {
 				
-					vedioListIterator.preLink();//下一曲	
+					vedioListIterator.nextLink();//下一曲	
+					if(vedioListIterator.getCurrent() != null)
 					mVideoView.setVideoPath(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
 				
 				}
@@ -128,26 +126,10 @@ public class VedioPlayerWithVitmioActivity extends BaseActivity
 				
 				@Override
 				public void onCompletion(MediaPlayer mp) {
-					try {
-						vedioListIterator.preLink();//下一曲						
-						mp.reset();
-						mp.setDataSource(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
-						mp.prepare();
-						mp.start();
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (SecurityException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalStateException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
+					vedioListIterator.nextLink();//下一曲	
+					if(vedioListIterator.getCurrent() != null)
+					mVideoView.setVideoPath(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
+				
 				}
 			});
 		}

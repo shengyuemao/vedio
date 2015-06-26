@@ -1702,13 +1702,13 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f0c0020;
         public static final int action_settings=0x7f0c005e;
         public static final int activity_chooser_view_content=0x7f0c0021;
-        public static final int activity_vedio_change=0x7f0c0046;
         public static final int activity_vedio_gesture=0x7f0c0041;
-        public static final int activity_vedio_pause=0x7f0c0044;
-        public static final int activity_vedio_playurl=0x7f0c0043;
+        public static final int activity_vedio_play_next=0x7f0c0044;
+        public static final int activity_vedio_play_pause=0x7f0c0043;
         public static final int activity_vedio_skbProgress=0x7f0c0047;
-        public static final int activity_vedio_stop=0x7f0c0045;
         public static final int activity_vedio_surfaceView=0x7f0c0042;
+        public static final int activity_vedio_time_current=0x7f0c0045;
+        public static final int activity_vedio_time_total=0x7f0c0046;
         public static final int addButton=0x7f0c0052;
         public static final int always=0x7f0c0014;
         public static final int beginning=0x7f0c001b;

@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import maomo.vedio.util.Logger;
+import maomo.vedio.util.ScreenBean;
 import maomo.vedio.util.Util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -158,15 +159,18 @@ public abstract class BasePlayer implements OnBufferingUpdateListener,
 
 		videoWidth = width;
 		videoHeight = height;
+		
+		int screenWidth = Util.getScreenWidth(activity);
+		int screenHeight = Util.getScreenHeight(activity);
+		
+		float ar = (float)videoWidth / videoHeight;
+		float ar1 = (float)videoHeight / videoWidth;
+		
 		if (videoHeight != 0 && videoWidth != 0)
 		{
 
-			int screenWidth = Util.getScreenWidth(activity);
-			int screenHeight = Util.getScreenHeight(activity);
-			float ar = videoWidth / videoHeight;
 			if (screenWidth > screenHeight)
 			{
-				Logger.i("screenWidth > screenHeight");
 				if (videoHeight >= screenHeight)
 				{
 					videoHeight = screenHeight;
@@ -183,9 +187,10 @@ public abstract class BasePlayer implements OnBufferingUpdateListener,
 					videoWidth = screenWidth;
 				}
 
-				videoHeight = (int) (videoWidth * ar);
+				videoHeight = (int) (videoWidth * ar1);
 			}			
 		}
+		
 		surfaceHolder.setFixedSize(videoWidth, videoHeight);
 	}
 }

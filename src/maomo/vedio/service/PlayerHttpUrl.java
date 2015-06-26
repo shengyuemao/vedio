@@ -36,6 +36,13 @@ public class PlayerHttpUrl extends BasePlayer
 		}
 
 	}
+	/**
+	 * 判斷是否正在播放
+	 * @return
+	 */
+	public boolean isPlaying(){
+		return mediaPlayer.isPlaying();
+	}
 
 	/**
 	 * 提供網絡地址实现播放
@@ -139,6 +146,8 @@ public class PlayerHttpUrl extends BasePlayer
 	{
 
 		mp.start();
+		
+		changeVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
 
 		Logger.e("onPrepared");
 	}
@@ -165,7 +174,6 @@ public class PlayerHttpUrl extends BasePlayer
 	@Override
 	public void onVideoSizeChanged(MediaPlayer mp, int width, int height)
 	{
-		Logger.e("width = " + width + ";" + "height = " + height);
 		changeVideoSize(width, height);
 	}
 

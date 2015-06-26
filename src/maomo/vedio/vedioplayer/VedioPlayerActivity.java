@@ -1,21 +1,14 @@
 package maomo.vedio.vedioplayer;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import maomo.vedio.gesture.GestureBuilderActivity;
-import maomo.vedio.http.FileAsyncHttpResponseHandler;
 import maomo.vedio.launcher.BaseActivity;
-import maomo.vedio.service.PlayerFilePath;
 import maomo.vedio.service.PlayerHttpUrl;
 import maomo.vedio.util.Canstact;
-import maomo.vedio.util.FileUtil;
 import maomo.vedio.util.Logger;
-
-import org.apache.http.Header;
-
-import android.content.Context;
+import maomo.vedio.vediobean.VedioModel;
+import maomo.vedio.vediolist.VedioList;
+import maomo.vedio.vediolist.VedioListIterator;
 import android.content.res.Configuration;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -24,12 +17,12 @@ import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.Prediction;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 /**
  * 此处用于播放来自网络，本地，和资源文件夹中文件 目前只可以播放MP4文件
@@ -43,16 +36,19 @@ public class VedioPlayerActivity extends BaseActivity
 
 	// 控件申明
 	private SurfaceView surfaceView;
-	private Button btnPause, btnPlayUrl, btnStop, btnGesture;
+	private ImageButton btnNext, btnPlayUrl;
 	private SeekBar skbProgress;
 	private GestureOverlayView gestureOverlayView;
 
 	// 不同播放类的申明
 	private PlayerHttpUrl player;
-	private PlayerFilePath playerFromFile;
 
 	// 手势库
 	GestureLibrary mGestureLib;
+	
+	//數據
+	private VedioListIterator vedioListIterator;
+	private VedioList vedioList;
 
 	@Override
 	/**
@@ -122,17 +118,11 @@ public class VedioPlayerActivity extends BaseActivity
 
 		surfaceView = (SurfaceView) findViewById(R.id.activity_vedio_surfaceView);
 
-		btnPlayUrl = (Button) findViewById(R.id.activity_vedio_playurl);
+		btnPlayUrl = (ImageButton) findViewById(R.id.activity_vedio_play_pause);
 		btnPlayUrl.setOnClickListener(new ClickEvent());
 
-		btnPause = (Button) findViewById(R.id.activity_vedio_pause);
-		btnPause.setOnClickListener(new ClickEvent());
-
-		btnStop = (Button) findViewById(R.id.activity_vedio_stop);
-		btnStop.setOnClickListener(new ClickEvent());
-
-		btnGesture = (Button) findViewById(R.id.activity_vedio_change);
-		btnGesture.setOnClickListener(new ClickEvent());
+		btnNext = (ImageButton) findViewById(R.id.activity_vedio_play_next);
+		btnNext.setOnClickListener(new ClickEvent());
 
 		skbProgress = (SeekBar) findViewById(R.id.activity_vedio_skbProgress);
 		skbProgress.setOnSeekBarChangeListener(new SeekBarChangeEvent());
@@ -142,14 +132,13 @@ public class VedioPlayerActivity extends BaseActivity
 				.addOnGesturePerformedListener(new GesturePerformed());
 
 		initProptrey();
-
+		initData();
 	}
 
 	private void initProptrey()
 	{
 		player = new PlayerHttpUrl(surfaceView, skbProgress, this);
-		playerFromFile = new PlayerFilePath(surfaceView, skbProgress, this);
-
+		
 		// 从raw中加载已经有的手势库
 		mGestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures); // 注2
 		if (!mGestureLib.load())
@@ -157,85 +146,33 @@ public class VedioPlayerActivity extends BaseActivity
 			finish();
 		}
 	}
+	
+	private void initData(){
+		VedioModel vedioModel = new VedioModel();
+		VedioModel vedioModel1 = new VedioModel();
+		VedioModel vedioModel2 = new VedioModel();
+		VedioModel vedioModel3 = new VedioModel();
+		vedioList = new VedioList();
+		vedioListIterator = new VedioListIterator(vedioList);
+		
+		vedioModel.setVedioUrl(Canstact.VEDIO_URL);
+		vedioModel1.setVedioUrl(Canstact.VEDIO_URL_CARTOON);
+		vedioModel2.setVedioUrl(Canstact.VEDIO_URL);
+		vedioModel3.setVedioUrl(Canstact.VEDIO_URL_CARTOON);
+		
+		vedioListIterator.insertBefore(vedioModel3);
+		vedioListIterator.insertBefore(vedioModel2);
+		vedioListIterator.insertBefore(vedioModel1);
+		vedioListIterator.insertBefore(vedioModel);
+		
+		play(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
+	}
 
 	/**
-	 * 用于处理网络文件下载后 播放本地缓存下来的文件
-	 * 
+	 * 處理手勢事件
 	 * @author 盛月茂
 	 *
 	 */
-	public class FileResponse extends FileAsyncHttpResponseHandler
-	{
-
-		private FileResponse(Context context)
-		{
-			super(context);
-		}
-
-		@Override
-		public void onFailure(int statusCode, Header[] headers,
-				Throwable throwable, java.io.File file)
-		{
-
-		}
-
-		@Override
-		public void onSuccess(int statusCode, Header[] headers, File file)
-		{
-
-			doFile(file);
-
-		}
-
-		/**
-		 * 
-		 * @param file
-		 */
-		private void doFile(File file)
-		{
-
-			if (file != null)
-			{
-
-			} else
-			{
-
-			}
-
-			File file2 = getTargetFile();
-
-			if (file2.exists())
-			{
-				if (FileUtil.hasSdcard())// 判断是否存在sd卡
-				{
-					String filePath = Environment.getExternalStorageDirectory()
-							+ "/" + "wode.mp4";
-
-					File file3 = new File(filePath);
-					if (!file3.exists())
-					{
-						try
-						{
-
-							byte[] buffer = FileUtil.readFileFromSdcard(file2);
-							FileUtil.writeFiletoSdcard(filePath, buffer);
-							Logger.e(filePath);
-						} catch (IOException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-
-					playerFromFile.playFile(filePath);// 播放缓存文件
-					deleteTargetFile();
-				}
-
-			}
-
-		}
-	};
-
 	class GesturePerformed implements OnGesturePerformedListener
 	{
 
@@ -255,12 +192,10 @@ public class VedioPlayerActivity extends BaseActivity
 
 					if (prediction.name.equals("x"))
 					{// 如果手势为x,则切换为安全模式
-						//player.playVideo(5,Canstact.VEDIO_URL_CARTOON);
 						player.playUrl(Canstact.VEDIO_URL);
 					}
 					if (prediction.name.equals("y"))
 					{// 如果手势为y,则切换为正常模式
-						//player.playVideo(5, Canstact.VEDIO_URL_CARTOON);;
 						player.playUrl(Canstact.VEDIO_URL_CARTOON);;
 					}
 
@@ -282,32 +217,39 @@ public class VedioPlayerActivity extends BaseActivity
 		{
 			switch (v.getId())
 			{
-			case R.id.activity_vedio_pause:
-
-				player.pause();// 暂停播放
-
-				break;
-			case R.id.activity_vedio_playurl:
+		
+			case R.id.activity_vedio_play_pause:
+				Toast.makeText(v.getContext(), vedioListIterator.getCurrent().getVedioUrl().getVedioUrl(), Toast.LENGTH_LONG).show();
+				play(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
 				
-				//player.playVideo(5, Canstact.VEDIO_URL);// 实时播放网络视频
-
-				player.playUrl(Canstact.VEDIO_URL_CARTOON);
-				// 缓存网络视频，当缓存成功后播放
-
 				break;
-			case R.id.activity_vedio_stop:
+			case R.id.activity_vedio_play_next:
+				
+				vedioListIterator.nextLink();
+				Toast.makeText(v.getContext(), vedioListIterator.getCurrent().getVedioUrl().getVedioUrl(), Toast.LENGTH_LONG).show();
+				player.playUrl(vedioListIterator.getCurrent().getVedioUrl().getVedioUrl());
 
-				player.stop();// 停止播放
-
-				break;
-			case R.id.activity_vedio_change:
-				goToNextActivitys(new GestureBuilderActivity(), new Bundle());// 跳转到手势列表中去
 				break;
 
 			}
 
 		}
+		
 
+	}
+	
+	/**
+	 * 播放视频
+	 * @param path
+	 */
+	private void play(String path) {
+		player.playUrl(path);
+		if(!player.isPlaying()){				
+			btnPlayUrl.setImageResource(R.drawable.mediacontroller_pause);
+		}else{
+			player.pause();
+			btnPlayUrl.setImageResource(R.drawable.mediacontroller_play);
+		}
 	}
 
 	@Override
