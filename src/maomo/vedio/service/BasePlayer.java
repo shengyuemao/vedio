@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import maomo.vedio.util.Logger;
-import maomo.vedio.util.ScreenBean;
 import maomo.vedio.util.Util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
